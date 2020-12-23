@@ -1,0 +1,60 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Главная{% endblock %} - Блог</title>
+        {% bootstrap_css %}
+        <link rel="stylesheet" type="text/css"
+        href="{% static 'main/style.css' %}">
+        {% bootstrap_javascript jquery='slim' %}
+    </head>
+    <body class="container-fluid">
+        <header class="mb-4">
+            <h1 class="display-1 text-center">Мой блог</h1>
+        </header>
+        <div class="row">
+            <ul class="col nav justify-content-end border">
+                <li class="nav-item">
+                    <form class="col-md-auto form-inline">
+                        {% bootstrap_form form show_label=False %}
+                        {% bootstrap_button content='Искать' button_type='submit' %}
+                    </form>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                    href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Профиль</a>
+                    <div class="dropdown-menu">
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'main:login' %}">Вход</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="row">
+            <nav class="col-md-auto nav flex-column border">
+                <a class="nav-link root"
+                href="{% url 'main:index' %}">Главная</a>
+                {% for categ in category %}
+                <a class="nav-link" href="{% url 'main:by_category' pk=categ.pk %}">
+                {{ categ.name }}</a>
+                {% endfor %}
+            </nav>
+            <section class="col border py-2">
+                {% bootstrap_messages %}
+                {% block content %}
+                {% endblock %}
+            </section>
+            <nav class="col-sm-1"></nav>
+        </div>
+        <footer class="mt-3">
+            <p class="text-right font-italic">&copy; читатели.</p>
+        </footer>
+    </body>
+</html>
